@@ -1,7 +1,14 @@
 View = require 'famous/core/View'
 Timer = require 'famous/utilities/Timer'
 
-Videos = require 'collections/Videos'
+Playlist = require 'stores/YouTubePlaylist'
+
+# control player:
+# https://developers.google.com/youtube/iframe_api_reference
+
+# <iframe id="ytplayer" type="text/html" width="640" height="360"
+# src="https://www.youtube.com/embed/M7lc1UVf-VE?autoplay=1&modestbranding=1&rel=0&showinfo=0"
+# frameborder="0" allowfullscreen>
 
 class VideoWall extends View
   scrollOffset: 100
@@ -9,12 +16,12 @@ class VideoWall extends View
 
   constructor: ->
     super
-    @videos = new Videos
-    @videos.on 'reset', @onPlaylistReset
-    @videos.on 'add', @onPlaylistAdd
+    @playlist = new Playlist
+    @playlist.on 'reset', @onPlaylistReset
+    @playlist.on 'add', @onPlaylistAdd
 
     # load Vice videos
-    @videos.fetchPlaylist('C4FDC39F67466711')
+    @playlist.fetchPlaylist 'C4FDC39F67466711'
 
   onPlaylistReset: =>
     debugger
@@ -31,9 +38,9 @@ class VideoWall extends View
     @prevScroll = scroll
     needmore || scrollmore
 
-  onPlaylistAdd: (video, playlist, options) =>
-    debugger
-    @renderChanges([video])
+  onPlaylistAdd: (event) =>
+    @playlist.eachIn event.newIds, (video) ->
+      console.log video.get 'title'
 
 
 module.exports = VideoWall
