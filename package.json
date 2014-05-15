@@ -1,0 +1,45 @@
+{
+  "name": "tubetube",
+  "version": "0.0.1",
+  "description": "Famo.us + Parse + YouTube.",
+  "author": "Joe Johnston",
+  "homepage": "https://github.com/simple10/tubetube",
+  "keywords": [
+    "node",
+    "coffeescript",
+    "parse",
+    "famous",
+    "youtube"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/simple10/tubetube.git"
+  },
+  "scripts": {
+    "start": "gulp",
+    "install": "bower install"
+  },
+  "engines": {
+    "node": "^0.10.0"
+  },
+  "engineStrict": true,
+  "dependencies": {},
+  "optionalDependencies": {},
+  "devDependencies": {
+    "gulp": "^3.5.5",
+    "gulp-util": "^2.2",
+    "gulp-jasmine": "^0.2.0",
+    "gulp-coverage": "^0.1.24",
+    "coffee-script": "^1.7",
+    "node-sass": "^0.7.0",
+    "webpack": "^1.0",
+    "webpack-dev-server": "^1.2",
+    "style-loader": "^0.6",
+    "coffee-loader": "^0.7",
+    "script-loader": "^0.5",
+    "sass-loader": "^0.0",
+    "css-loader": "^0.6.12",
+    "gulp-clean": "^0.2.4",
+    "gulp-gzip": "0.0.8"
+  }
+}
