@@ -4,7 +4,6 @@ ImageSurface = require 'famous/surfaces/ImageSurface'
 Timer = require 'famous/utilities/Timer'
 ScrollView = require 'famous/views/ScrollView'
 FloatLayout = require 'layouts/FloatLayout'
-GridLayout = require 'famous/views/GridLayout'
 
 Playlist = require 'stores/YouTubePlaylist'
 
@@ -32,13 +31,6 @@ class VideoWall extends View
     @scroll = new ScrollView
       margin: 2000
 
-    # @layout = new GridLayout
-    #   dimensions: [4, 10]
-    # @layout.getSize = ->
-    #   [500, 500]
-    # @layout.sequenceFrom @surfaces
-    # @scroll.sequenceFrom [@layout]
-
     @layout = new FloatLayout
     @layout.sequenceFrom @surfaces
     @scroll.sequenceFrom [@layout]
@@ -49,10 +41,6 @@ class VideoWall extends View
 
     @add @background
     @add @scroll
-
-    Timer.setTimeout =>
-      @layout.options.dimensions = [2, 25]
-    , 5000
 
 
   addVideo: (video) ->
