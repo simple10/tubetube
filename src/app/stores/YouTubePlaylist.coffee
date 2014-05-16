@@ -27,6 +27,7 @@ class YouTubePlaylist extends EventEmitter
   fetch: (options) ->
     @playlistId = options.playlistId
     limit = options.limit or @limit
+    limit = 50 if limit > 50
     url = @getURL "playlistItems?part=snippet&playlistId=#{@playlistId}&maxResults=#{limit}"
     url = "#{url}&pageToken=#{options.pageToken}" if options.pageToken
     Utility.loadURL url, (results) =>
