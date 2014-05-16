@@ -71,7 +71,7 @@ class YouTubePlaylist extends EventEmitter
         @videos[id] = new Video
           id: id
           title: video.snippet.title
-          thumbnail: video.snippet.thumbnails.high
+          thumbnail: video.snippet.thumbnails.medium
         @order.push id
         newIds.push id
     newIds
