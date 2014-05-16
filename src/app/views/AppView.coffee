@@ -23,6 +23,7 @@ class AppView extends View
   constructor: ->
     super
     @wall = new VideoWall
+    @add @wall
 
 
 module.exports = AppView

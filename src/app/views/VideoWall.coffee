@@ -1,5 +1,10 @@
 View = require 'famous/core/View'
+Surface = require 'famous/core/Surface'
+ImageSurface = require 'famous/surfaces/ImageSurface'
 Timer = require 'famous/utilities/Timer'
+ScrollView = require 'famous/views/ScrollView'
+FloatLayout = require 'layouts/FloatLayout'
+GridLayout = require 'famous/views/GridLayout'
 
 Playlist = require 'stores/YouTubePlaylist'
 
@@ -11,36 +16,61 @@ Playlist = require 'stores/YouTubePlaylist'
 # frameborder="0" allowfullscreen>
 
 class VideoWall extends View
+  # Vice channel playlist
+  playlistId: 'C4FDC39F67466711'
   scrollOffset: 100
   prevScroll: 0
+  surfaces: []
 
   constructor: ->
     super
     @playlist = new Playlist
-    @playlist.on 'reset', @onPlaylistReset
     @playlist.on 'add', @onPlaylistAdd
+    @playlist.fetchPlaylist @playlistId
 
-    # load Vice videos
-    @playlist.fetchPlaylist 'C4FDC39F67466711'
+    @scroll = new ScrollView
+      margin: 2000
 
-  onPlaylistReset: =>
-    debugger
-    # @render()
-    Timer.setTimeout @loadMoreVideos, 1000
+    # @layout = new GridLayout
+    #   dimensions: [4, 10]
+    # @layout.getSize = ->
+    #   [500, 500]
+    # @layout.sequenceFrom @surfaces
+    # @scroll.sequenceFrom [@layout]
+
+    @layout = new FloatLayout
+    @layout.sequenceFrom @surfaces
+    @scroll.sequenceFrom [@layout]
+
+    @background = new Surface
+      size: [undefined, undefined]
+    @background.pipe @scroll
+
+    @add @background
+    @add @scroll
+
+    Timer.setTimeout =>
+      @layout.options.dimensions = [2, 25]
+    , 5000
+
+
+  addVideo: (video) ->
+    thumb = video.get 'thumbnail'
+    surface = new ImageSurface
+      size: [thumb.width, thumb.height]
+      classes: ['video__thumbnail']
+      content: thumb.url
+    surface.pipe @scroll
+    @surfaces.push surface
 
   loadMoreVideos: =>
-    @collection.fetchNextPage() if @needMoreVideos()
-
-  needMoreVideos: ->
-    needmore = @$videos.height() - @scrollOffset < $(window).height()
-    scroll = $(document).scrollTop() + $(window).height() + @scrollOffset
-    scrollmore = @prevScroll < scroll && scroll > @$videos.height()
-    @prevScroll = scroll
-    needmore || scrollmore
+    @playlist.fetchNextPage()
 
   onPlaylistAdd: (event) =>
-    @playlist.eachIn event.newIds, (video) ->
-      console.log video.get 'title'
+    @playlist.eachIn event.newIds, (video) =>
+      @addVideo video
+    #Timer.setTimeout @loadMoreVideos, 1000
+
 
 
 module.exports = VideoWall
