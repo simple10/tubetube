@@ -31,7 +31,10 @@ class YouTubePlaylist extends EventEmitter
     url = @getURL "playlistItems?part=snippet&playlistId=#{@playlistId}&maxResults=#{limit}"
     url = "#{url}&pageToken=#{options.pageToken}" if options.pageToken
     Utility.loadURL url, (results) =>
-      res = JSON.parse results
+      if results
+        res = JSON.parse results
+      else
+        res = error: 'Invalid response'
       return @emit 'error', res if res.error
       @nextPageToken = res.nextPageToken
       @limit = res.pageInfo.resultsPerPage

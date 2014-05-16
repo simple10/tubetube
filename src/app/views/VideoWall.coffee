@@ -26,6 +26,7 @@ class VideoWall extends View
     super
     @playlist = new Playlist
     @playlist.on 'add', @onPlaylistAdd
+    @playlist.on 'error', @onError
     @playlist.fetchPlaylist @playlistId
 
     @scroll = new ScrollView
@@ -71,6 +72,8 @@ class VideoWall extends View
       @addVideo video
     #Timer.setTimeout @loadMoreVideos, 1000
 
+  onError: (error) =>
+    debugger
 
 
 module.exports = VideoWall
