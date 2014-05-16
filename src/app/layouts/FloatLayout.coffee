@@ -27,7 +27,7 @@ class FloatLayout extends ReflowLayout
       col++
       if x + itemSize[0] > size[0]
         x = 0
-        col = 0
+        col = 1
         row++
       y = row * itemSize[1]
       @_animateModifier i, itemSize, [x, y, 0], 1
