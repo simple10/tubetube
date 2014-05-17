@@ -13,6 +13,9 @@ class ReflowLayout extends ContextualView
   @DEFAULT_OPTIONS:
     # Amount of milliseconds to debounce resize events before calling reflow
     resizeDelay: 200
+    # Transition settings for repositioning items
+    transition:
+      duration: 200
 
   _nodes: null
   _modifiers: []

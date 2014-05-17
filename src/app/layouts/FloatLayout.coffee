@@ -5,7 +5,6 @@ ReflowLayout = require 'layouts/ReflowLayout'
 class FloatLayout extends ReflowLayout
   @DEFAULT_OPTIONS:
     resizeDelay: 200
-    defaultItemSize: [50, 50]
     transition:
       duration: 200
 
