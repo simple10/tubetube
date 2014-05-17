@@ -22,11 +22,12 @@ class ReflowLayout extends ContextualView
   _states: []
   _contextSizeCache: [undefined, undefined]
   _size: null
+  _animationCount: 0
 
   constructor: (options) ->
     super
     # TODO: make sure pull request is in master https://github.com/Famous/core/pull/32
-    @_debouncedReflow = Timer.debounce @reflow, @options.resizeDelay or 200
+    @_debouncedReflow = Timer.debounce @_reflow, @options.resizeDelay or 200
 
 
   getSize: ->
@@ -66,14 +67,20 @@ class ReflowLayout extends ContextualView
     # Override in subclass
 
 
-  _reflow: (size) ->
+  _beforeReflow: (size) ->
     return false if size[0] is @_contextSizeCache[0] and size[1] is @_contextSizeCache[1]
     # reflow immediately the first time
     if @_contextSizeCache[0] == undefined
-      @reflow size
+      @_reflow size
     else
       @_debouncedReflow size
     @_contextSizeCache = size.slice 0
+
+
+  _reflow: (size) ->
+    @_animationCount = 0
+    @reflow size
+    @_eventOutput.emit 'reflow'
 
 
   ###
@@ -95,7 +102,7 @@ class ReflowLayout extends ContextualView
 
     return false unless size
 
-    @_reflow size
+    @_beforeReflow size
 
     sequence = @getSequence()
     result = []
@@ -137,6 +144,8 @@ class ReflowLayout extends ContextualView
   # See GridLayout for example.
   ###
   _animateModifier: (index, size, position, opacity) ->
+    @_animationCount++
+
     currState = @_states[index]
 
     currSize = currState.size
@@ -149,9 +158,12 @@ class ReflowLayout extends ContextualView
     currOpacity.halt()
     currSize.halt()
 
-    currTransform.setTranslate position, transition
+    currTransform.setTranslate position, transition, @_afterAnimate
     currSize.set size, transition
     currOpacity.set opacity, transition
 
+  _afterAnimate: =>
+    @_animationCount -= 1
+    @_eventOutput.emit 'afterAnimate' if @_animationCount <= 0
 
 module.exports = ReflowLayout

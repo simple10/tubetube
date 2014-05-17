@@ -33,6 +33,11 @@ class VideoWall extends View
 
     @layout = new FloatLayout
     @layout.sequenceFrom @surfaces
+    @layout.on 'afterAnimate', =>
+      # TODO: make sure ScrollView is still in view
+      # There doesn't seem to be an easy way with ScrollView to scroll to a position:
+      # e.g. scroll to top
+
     @scroll.sequenceFrom [@layout]
 
     @background = new Surface
