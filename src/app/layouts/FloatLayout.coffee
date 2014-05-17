@@ -9,7 +9,7 @@ class FloatLayout extends ReflowLayout
       duration: 200
 
   getSize: ->
-    [500, 10000]
+    @_size
 
   reflow: (size) ->
     i = 0
@@ -32,8 +32,7 @@ class FloatLayout extends ReflowLayout
         @_animateModifier i, itemSize, [x, y, 0], 1
       i++
 
-    # todo: update size here
-    # see getSize
+    @_size = [size[0], itemSize[1]*(row+1)]
 
 
 module.exports = FloatLayout
