@@ -9,24 +9,19 @@ class FloatLayout extends ReflowLayout
     transition:
       duration: 200
 
-  constructor: ->
-    super
-
   getSize: ->
     [500, 10000]
 
   reflow: (size) ->
-    sequence = @getSequence()
     i = 0
     col = 0
     row = 0
     len = @getSequenceLength()
     # assume items are all the same size for now
-    itemSize = sequence.getSize()
+    itemSize = @getSequence().getSize()
     # todo: use "while sequence" once Felix fixes sequence.getNext
     while i < len
       # todo: use Array.push in @_createModifier and @_animateModifier
-      @_createModifier i unless @_modifiers[i]
       x = col * itemSize[0]
       col++
       if x + itemSize[0] > size[0]
@@ -34,8 +29,10 @@ class FloatLayout extends ReflowLayout
         col = 1
         row++
       y = row * itemSize[1]
-      @_animateModifier i, itemSize, [x, y, 0], 1
-      sequence = sequence.getNext()
+      if @_modifiers[i] is undefined
+        @_createModifier i, itemSize, [x, y, 0], 1
+      else
+        @_animateModifier i, itemSize, [x, y, 0], 1
       i++
 
     # todo: update size here
