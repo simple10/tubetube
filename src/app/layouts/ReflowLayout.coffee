@@ -83,12 +83,16 @@ class ReflowLayout extends ContextualView
   # @param {Context} context commit context
   ###
   commit: (context) ->
+    return false unless @getSequenceLength()
+
     transform = context.transform
     opacity = context.opacity
     origin = context.origin
     size = context.size
 
-    @_reflow size  if @getSequenceLength()
+    return false unless size
+
+    @_reflow size
 
     sequence = @getSequence()
     result = []
@@ -102,7 +106,7 @@ class ReflowLayout extends ContextualView
         target: item.render()
       sequence = sequence.getNext()
       i++
-    transform = Transform.moveThen [ -size[0] * origin[0], -size[1] * origin[1], 0 ], transform  if size
+    transform = Transform.moveThen [ -size[0] * origin[0], -size[1] * origin[1], 0 ], transform
 
     {
       transform: transform
