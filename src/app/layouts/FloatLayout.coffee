@@ -19,9 +19,7 @@ class FloatLayout extends ReflowLayout
     len = @getSequenceLength()
     # assume items are all the same size for now
     itemSize = @getSequence().getSize()
-    # todo: use "while sequence" once Felix fixes sequence.getNext
     while i < len
-      # todo: use Array.push in @_createModifier and @_animateModifier
       x = col * itemSize[0]
       col++
       if x + itemSize[0] > size[0]
